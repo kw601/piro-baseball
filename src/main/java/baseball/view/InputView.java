@@ -7,7 +7,7 @@ public class InputView {
         try {
             System.out.print("숫자를 입력해주세요: ");
             String userInput = Console.readLine();
-            if(userInput.length() != 3) { return inputNumbers(); }
+            if(userInput.length() != 3) { throw new IllegalArgumentException("숫자 3개를 입력하세요."); }
 
             return userInput;
         }
@@ -20,7 +20,9 @@ public class InputView {
     public static String continueGame() {
         try {
             System.out.println("게임을 새로 시작하려면 1, 종료하려면 2를 입력하세요.");
-            return Console.readLine();
+            String userInput = Console.readLine();
+            if(userInput != "1" || userInput != "2") { throw new IllegalArgumentException("1 혹은 2를 입력하세요."); }
+            return userInput;
         }
         catch(IllegalArgumentException e) {
             return inputNumbers();

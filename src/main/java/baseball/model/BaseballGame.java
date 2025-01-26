@@ -36,10 +36,10 @@ public class BaseballGame {
     public static boolean hasNumsOutOfRange(int[] inputNumbers) {
         for (int num : inputNumbers) {
             if (num < 1 || num > 9) {
-                return false;
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
     // 비교 -> 볼 count
