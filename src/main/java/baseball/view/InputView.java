@@ -5,8 +5,11 @@ import camp.nextstep.edu.missionutils.Console;
 public class InputView {
     public static String inputNumbers() {
         try {
-            System.out.println("숫자를 입력해주세요: ");
-            return Console.readLine();
+            System.out.print("숫자를 입력해주세요: ");
+            String userInput = Console.readLine();
+            if(userInput.length() != 3) { return inputNumbers(); }
+
+            return userInput;
         }
         catch(IllegalArgumentException e) {
             return inputNumbers();
@@ -14,7 +17,7 @@ public class InputView {
     }
 
     // 나중에 게임 계속할건지 물어보는 코드
-    public static String inputNumbers(int number) {
+    public static String continueGame() {
         try {
             System.out.println("게임을 새로 시작하려면 1, 종료하려면 2를 입력하세요.");
             return Console.readLine();

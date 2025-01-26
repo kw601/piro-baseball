@@ -1,5 +1,6 @@
 package baseball.model;
 
+import baseball.controller.BaseballGameController;
 import baseball.view.InputView;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +14,7 @@ public class BaseballGameTest {
     public void testGenerateTargetNumber() {
         // 정답 숫자 3개 생성 확인
         BaseballGame baseballGame = new BaseballGame();
-        int[] randomNumber = game.getTargetNumber();
+        int[] randomNumber = baseballGame.setRandomNumbers();
 
         // 정답 숫자 범위, 중복 여부 확인
         assertEquals(3, randomNumber.length);
@@ -36,45 +37,44 @@ public class BaseballGameTest {
         ByteArrayInputStream in = new ByteArrayInputStream(simulatedInput.getBytes());
         System.setIn(in);  // System.in을 입력 스트림으로 교체
 
-        Scanner scanner = new Scanner(System.in);
-        InputView inputView = new InputView(scanner); // mock된 Scanner를 전달
+        InputView inputView = new InputView(); // 기본 생성자 사용
 
-
-        int[] userInput = inputView.getUserInput();  // 입력 받는 메서드 호출
+        String userInput = inputView.inputNumbers();
+        int[] userInputList = baseballGame.setNumbersList(userInput);
 
         // 예상한 결과와 비교
-        assertArrayEquals(new int[] {1, 2, 3}, userInput);
+        assertArrayEquals(new int[] {1, 2, 3}, userInputList);
 
         // 테스트 후 System.in 복구
         System.setIn(System.in);
-        scanner.close();    // scanner 닫기
     }
 
     @Test
     public void testAnswerNumber() {
         // 정답 확인(스트라이크, 볼, ... )
         BaseballGame baseballGame = new BaseballGame();
-        game.setTargetNumber(new int[] {1,2,3});
+        BaseballGameController baseballGameController = new BaseballGameController();
+        int[] answer = new int[] {1,2,3};
 
-        String result = game.checkAnswer(new int[] {1, 2, 3});
+        String result = baseballGame.checkAnswer(answer, new int[] {1, 2, 3});
         assertEquals("3스트라이크", result);
 
-        result = game.checkAnswer(new int[] {1, 2, 5});
+        result = baseballGame.checkAnswer(answer, new int[] {1, 2, 5});
         assertEquals("2스트라이크", result);
 
-        result = game.checkAnswer(new int[] {1, 3, 2});
+        result = baseballGame.checkAnswer(answer, new int[] {1, 3, 2});
         assertEquals("2볼 1스트라이크", result);
 
-        result = game.checkAnswer(new int[] {1, 4, 2});
+        result = baseballGame.checkAnswer(answer, new int[] {1, 4, 2});
         assertEquals("1볼 1스트라이크", result);
 
-        result = game.checkAnswer(new int[] {1, 4, 5});
+        result = baseballGame.checkAnswer(answer, new int[] {1, 4, 5});
         assertEquals("1스트라이크", result);
 
-        result = game.checkAnswer(new int[] {2, 3, 1});
+        result = baseballGame.checkAnswer(answer, new int[] {2, 3, 1});
         assertEquals("3볼", result);
 
-        result = game.checkAnswer(new int[] {5, 6, 7});
-        assertEquals("0볼", result);
+        result = baseballGame.checkAnswer(answer, new int[] {5, 6, 7});
+        assertEquals("낫싱", result);
     }
 }
